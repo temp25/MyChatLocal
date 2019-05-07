@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			function checkUser() {
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (xhttp.readyState == 4 && xhttp.status == 200) {
+						//document.getElementById("demo").innerHTML = this.responseText;
+						alert("response : "+this.responseText);
+					}
+				};
+				xhttp.open("GET", "http://127.0.0.1:8888/checkUser", false);
+				xhttp.send();
+			}
+		</script>
+	</head>
+	<body onload="checkUser()">
+
+	</body>
+</html>
