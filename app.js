@@ -81,7 +81,7 @@ signalTraps.map(type => {
 
 
 
-http.createServer(onRequest).listen(80); //bind to http port
+http.createServer(onRequest).listen(5000); //bind to port
 console.log('Server has started');
 
 function onRequest(request, response) {
