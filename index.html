@@ -3,6 +3,20 @@
 		<title></title>
 		<script type="text/javascript">
 
+			function addUser(user) {
+				var usersList = document.getElementById("usersList");
+				var userNode = document.createElement("li");
+				userNode.innerHTML = user;
+				usersList.appendChild(userNode);
+			}
+
+			function postMessage() {
+				var message = document.getElementById("message");
+				document.getElementById("messages").appendChild(document.createTextNode(message.value));
+				document.getElementById("messages").appendChild(document.createElement("br"));
+				document.getElementById("messages").appendChild(document.createElement("br"));
+				message.value = "";
+			}
 
 			function checkUser() {
 				var xhttp = new XMLHttpRequest();
@@ -17,34 +31,95 @@
 			}
 		</script>
 		<style type="text/css">
+			div#messageView{
+				float:left;
+				width: 89%;
+				height: 95%;
+			}
 			li {
-				padding: 1% 0% 1% 0%;
+				padding: 2% 0% 2% 0%;
 			}
 			ul {
-				list-style-type: none; text-align: left; width: 100%
+				list-style-type: none;
+				text-align: left;
+				width: 100%;
 			}
-			div#usersMainContent {
+			div#userViewBody {
 				text-align: center;
 				width: 100%;
 				height: 90%;
+				overflow-x: hidden;
+				overflow-y: auto;
 			}
+			div#messages{
+				width: 100%;
+				height: 85%;
+				border:1px solid black;
+				overflow: auto;
+			}
+			div#messagesPostControl{
+				width:100%;
+				height: 15%;
+				margin-top: 1%;
+				border:1px solid black;
+			}
+			div#messagesPostControl1{
+				height: 100%;
+				width: 100%;
+			}
+			textarea#message{
+				height: 100%;
+				width: 100%;
+				resize: none;
+				align-content: flex-start;
+			}
+			div#messagesPostControl2{
+				height: 100%;
+				width: 10%;
+			}
+
+			div#userView{
+				float:left;
+				width: 7%;
+				height: 95%;
+				border:1px solid black;
+				padding: 1% 1% 1% 1%;
+				margin-left: 1%;
+			}
+
+			div#userViewHeader{
+				text-align: center;
+				width: 100%;
+				height: 5%;
+			}
+
+			button#postBtn{
+				margin-top: 3px;
+			}
+
 		</style>
 	</head>
 	<body>
-			<div style="float:left; width: 80%; height: 95%; border:1px solid black; padding: 1% 1% 1% 1%;">Messages</div>
-			<div style="float:left; width: 10%; height: 95%; border:1px solid black; padding: 1% 1% 1% 1%; margin-left: 1%">
-				<div style="text-align: center; width: 100%; height: 5%;">
+			<div id="messageView">
+				<div id="messages"></div>
+				<div id="messagesPostControl">
+					<div id="messagesPostControl1">
+						<textarea id="message"></textarea>
+					</div>
+					<div id="messagesPostControl2">
+						<button id="postBtn" onclick="postMessage()">Post message</button>
+					</div>
+				</div>
+			</div>
+			<div id="userView">
+				<div id="userViewHeader">
 					Available Users
 				</div>
-				<div id="usersMainContent">
-					<ul>
-						<li>user1</li>
-						<li>user2</li>
-						<li>user3</li>
-						<li>user4</li>
-						<li>user5</li>
+				<div id="userViewBody">
+					<ul id="usersList">
 					</ul>
 				</div>
 			</div>
+
 	</body>
 </html>
