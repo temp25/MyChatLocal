@@ -2,20 +2,49 @@
 	<head>
 		<title></title>
 		<script type="text/javascript">
+
+
 			function checkUser() {
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
 					if (xhttp.readyState == 4 && xhttp.status == 200) {
 						//document.getElementById("demo").innerHTML = this.responseText;
-						alert("response : "+this.responseText);
+						//alert("response : "+this.responseText);
 					}
 				};
 				xhttp.open("GET", "https://nodesample201.herokuapp.com/checkUser", false);
 				xhttp.send();
 			}
 		</script>
+		<style type="text/css">
+			li {
+				padding: 1% 0% 1% 0%;
+			}
+			ul {
+				list-style-type: none; text-align: left; width: 100%
+			}
+			div#usersMainContent {
+				text-align: center;
+				width: 100%;
+				height: 90%;
+			}
+		</style>
 	</head>
-	<body onload="checkUser()">
-
+	<body>
+			<div style="float:left; width: 80%; height: 95%; border:1px solid black; padding: 1% 1% 1% 1%;">Messages</div>
+			<div style="float:left; width: 10%; height: 95%; border:1px solid black; padding: 1% 1% 1% 1%; margin-left: 1%">
+				<div style="text-align: center; width: 100%; height: 5%;">
+					Available Users
+				</div>
+				<div id="usersMainContent">
+					<ul>
+						<li>user1</li>
+						<li>user2</li>
+						<li>user3</li>
+						<li>user4</li>
+						<li>user5</li>
+					</ul>
+				</div>
+			</div>
 	</body>
 </html>
