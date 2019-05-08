@@ -2,6 +2,7 @@ var http = require('http');
 var fileSystem = require('fs');
 const { Kafka, logLevel } = require('kafkajs');
 const appUsers = [];
+const PORT = process.env.PORT || 5000;
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -81,7 +82,7 @@ signalTraps.map(type => {
 
 
 
-http.createServer(onRequest).listen(5000); //bind to port
+http.createServer(onRequest).listen(PORT); //bind to dynamic PORT set by heroku at runtime
 console.log('Server has started');
 
 function onRequest(request, response) {
