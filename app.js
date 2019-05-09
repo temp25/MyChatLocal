@@ -3,6 +3,7 @@ var fileSystem = require('fs');
 const { Kafka, logLevel } = require('kafkajs');
 const appUsers = [];
 const PORT = process.env.PORT || 5000;
+var isConsumerInitialized = false;
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -27,10 +28,10 @@ const kafka = new Kafka({
 });
 
 
-const topic = "19uds2d2-testUsers2";
+const userTopic = "19uds2d2-testUsers2";
 const gId = "19uds2d2-consumer_"+(new Date()).getTime();
 
-console.log("\n topic : " + topic + "\n");
+console.log("\n topic : " + userTopic + "\n");
 console.log("\n groupId : " + gId + "\n");
 
 const errorTypes = ['unhandledRejection', 'uncaughtException']
@@ -73,19 +74,20 @@ function onRequest(request, response) {
  var user_agent = request.headers['user-agent'];
  var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
  
- console.log("Request from user_ip_address : "+user_ip_address);
- console.log("User Agent : "+user_agent);
- console.log("uniqueGroupId : "+uniqueGroupId);
+ //console.log("Request from user_ip_address : "+user_ip_address);
+ //console.log("User Agent : "+user_agent);
+ //console.log("uniqueGroupId : "+uniqueGroupId);
  
 
-  console.log('request url ' + request.url);
+  //console.log('request url ' + request.url);
 
-  if (false) {
+  if (!isConsumerInitialized) {
+    isConsumerInitialized = true;
     const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
 
     const run = async () => {
       await consumer.connect();
-      await consumer.subscribe({ topic: topic, fromBeginning: true });
+      await consumer.subscribe({ topic: userTopic, fromBeginning: true });
       await consumer.run({
         partitionsConsumedConcurrently: 5,
         eachMessage: async ({ topic, partition, message }) => {

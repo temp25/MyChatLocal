@@ -23,7 +23,7 @@
 				xhttp.onreadystatechange = function() {
 					if (xhttp.readyState == 4 && xhttp.status == 200) {
 						//document.getElementById("demo").innerHTML = this.responseText;
-						//alert("response : "+this.responseText);
+						alert("response : "+xhttp.responseText);
 					}
 				};
 				xhttp.open("GET", "https://nodesample201.herokuapp.com/checkUser", false);
@@ -99,7 +99,7 @@
 
 		</style>
 	</head>
-	<body>
+	<body onload="checkUser()">
 			<div id="messageView">
 				<div id="messages"></div>
 				<div id="messagesPostControl">
