@@ -89,6 +89,10 @@ function onRequest(request, response) {
   /* response.writeHead(200);
   response.write('Hello Noders');
   response.end(); */
+ 
+ var user_ip_address = ((req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress);
+ 
+ console.log("Request from user_ip_address : "+user_ip_address);
 
   console.log('request url ' + request.url);
 
