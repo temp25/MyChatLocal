@@ -90,7 +90,7 @@ function onRequest(request, response) {
   response.write('Hello Noders');
   response.end(); */
  
- var user_ip_address = ((req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress);
+ var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
  
  console.log("Request from user_ip_address : "+user_ip_address);
 
