@@ -33,27 +33,6 @@ const gId = "19uds2d2-consumer_"+(new Date()).getTime();
 console.log("\n topic : " + topic + "\n");
 console.log("\n groupId : " + gId + "\n");
 
-const consumer = kafka.consumer({ groupId: gId, fromBeginning: true  });
-
-const run = async () => {
-  await consumer.connect()
-  await consumer.subscribe({ topic: topic, fromBeginning: true })
-  await consumer.run({
-    partitionsConsumedConcurrently: 5,
-    eachMessage: async ({ topic, partition, message }) => {
-        const msgRcvd = message.value.toString();
-      //console.log(msgRcvd);
-      if(!(msgRcvd in appUsers)){
-          appUsers.push(msgRcvd);
-          //console.log(appUsers.length+" app users added so far");
-      }
-    },
-
-  })
-}
-
-run().catch(e => console.error(`[example/consumer] ${e.message}`, e))
-
 const errorTypes = ['unhandledRejection', 'uncaughtException']
 const signalTraps = ['SIGTERM', 'SIGINT', 'SIGUSR2']
 
@@ -91,10 +70,38 @@ function onRequest(request, response) {
   response.end(); */
  
  var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
+ var user_agent = request.headers['User-Agent'];
+ var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
  
  console.log("Request from user_ip_address : "+user_ip_address);
+ console.log("User Agent : "+user_agent);
+ console.log("uniqueGroupId : "+uniqueGroupId);
+ 
 
   console.log('request url ' + request.url);
+
+  if (false) {
+    const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+
+    const run = async () => {
+      await consumer.connect();
+      await consumer.subscribe({ topic: topic, fromBeginning: true });
+      await consumer.run({
+        partitionsConsumedConcurrently: 5,
+        eachMessage: async ({ topic, partition, message }) => {
+            const msgRcvd = message.value.toString();
+          //console.log(msgRcvd);
+          if(!(msgRcvd in appUsers)){
+              appUsers.push(msgRcvd);
+              //console.log(appUsers.length+" app users added so far");
+          }
+        },
+    
+      });
+    };
+    
+    run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
+  }
 
   if (request.url == "/") {
     fileSystem.readFile('./index.html', function (err, htmlContent) {
