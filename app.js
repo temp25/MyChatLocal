@@ -92,10 +92,10 @@ function onRequest(request, response) {
         partitionsConsumedConcurrently: 5,
         eachMessage: async ({ topic, partition, message }) => {
             const msgRcvd = message.value.toString();
-          //console.log(msgRcvd);
+          console.log("msgRcvd : "+msgRcvd);
           if(!(msgRcvd in appUsers)){
               appUsers.push(msgRcvd);
-              //console.log(appUsers.length+" app users added so far");
+              console.log(appUsers.length+" app users added so far");
           }
         },
     
