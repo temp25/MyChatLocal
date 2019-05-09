@@ -70,7 +70,7 @@ function onRequest(request, response) {
   response.end(); */
  
  var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
- var user_agent = request.headers['User-Agent'];
+ var user_agent = request.headers['user-agent'];
  var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
  
  console.log("Request from user_ip_address : "+user_ip_address);
