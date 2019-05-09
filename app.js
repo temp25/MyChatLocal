@@ -65,25 +65,7 @@ signalTraps.map(type => {
 http.createServer(onRequest).listen(PORT); //bind to dynamic PORT set by heroku at runtime
 console.log('Server has started');
 
-function onRequest(request, response) {
-  /* response.writeHead(200);
-  response.write('Hello Noders');
-  response.end(); */
- 
- var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
- var user_agent = request.headers['user-agent'];
- var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
- 
- //console.log("Request from user_ip_address : "+user_ip_address);
- //console.log("User Agent : "+user_agent);
- //console.log("uniqueGroupId : "+uniqueGroupId);
- 
-
-  //console.log('request url ' + request.url);
-
-  if (!isConsumerInitialized) {
-    isConsumerInitialized = true;
-    const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+const consumer = kafka.consumer({ groupId: '::1_Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0_1558424107367', fromBeginning: true  });
 
     const run = async () => {
       await consumer.connect();
@@ -103,6 +85,45 @@ function onRequest(request, response) {
     };
     
     run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
+
+function onRequest(request, response) {
+  /* response.writeHead(200);
+  response.write('Hello Noders');
+  response.end(); */
+ 
+ var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
+ var user_agent = request.headers['user-agent'];
+ var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
+ 
+ //console.log("Request from user_ip_address : "+user_ip_address);
+ //console.log("User Agent : "+user_agent);
+ //console.log("uniqueGroupId : "+uniqueGroupId);
+ 
+
+  //console.log('request url ' + request.url);
+
+  if (!isConsumerInitialized) {
+    isConsumerInitialized = true;
+    /* const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+
+    const run = async () => {
+      await consumer.connect();
+      await consumer.subscribe({ topic: userTopic, fromBeginning: true });
+      await consumer.run({
+        partitionsConsumedConcurrently: 5,
+        eachMessage: async ({ topic, partition, message }) => {
+            const msgRcvd = message.value.toString();
+          console.log("msgRcvd : "+msgRcvd);
+          if(!(msgRcvd in appUsers)){
+              appUsers.push(msgRcvd);
+              console.log(appUsers.length+" app users added so far");
+          }
+        },
+    
+      });
+    };
+    
+    run().catch(e => console.error(`[example/consumer] ${e.message}`, e)); */
   }
 
   if (request.url == "/") {
