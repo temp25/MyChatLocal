@@ -6,6 +6,7 @@ const appUsers = [];
 const PORT = process.env.PORT || 5000;
 var isConsumerInitialized = false;
 var usersJson = {};
+var socketPtr;
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -17,7 +18,13 @@ console.log('Server has started');
 
 io.on('connection', (socket) => {
     console.log('Client connected');
+    socketPtr = socket;
 });
+
+setTimeout(() => {
+    console.log("Invoking socket emission");
+    socketPtr.emit('myevent', "sample data using socket.io");
+}, 5000);
 
 
 io.on('disconnect', (socket) => {
