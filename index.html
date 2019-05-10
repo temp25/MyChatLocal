@@ -26,23 +26,23 @@
                 console.log('disconnected');
             });
             
-		Swal.fire({
+		/*Swal.fire({
     		title: 'Loading page contents',
     		allowOutsideClick: () => false,
     		onOpen: () => {
     			   Swal.showLoading();
     		}
-    	});
+    	});*/
     	
     	setTimeout(()=>{
-            if(Swal.isLoading()){
+            /*if(Swal.isLoading()){
                 Swal.close();
-            }
+            }*/
     	    setUserNick();
     	}, 10000)
     	
     	function setUserNick(){
-    	    Swal.fire({
+    	    /*Swal.fire({
               title: 'Enter your nickname',
               input: 'text',
               inputValue: inputValue,
@@ -73,7 +73,20 @@
                     return nickname;
                 }
               }
-            });
+            });*/
+           
+             var nickname = prompt("Please enter your nickname", "");
+              if (nickname != null && nickname.trim() != '') {
+                  if(nickname in appUsers){
+                      alert("Welcome back, "+nickname );
+                    }else{
+                        //send back user nick to server for adding it to queue
+                        socket.emit('addUser', nickname);
+                        alert("Welcome, "+nickname );
+                    }
+
+              }
+
             
     	}
 

@@ -81,6 +81,8 @@ io.on('connection', (socket) => {
     console.log('Client connected');
     socketPtr = socket;
     
+    
+    
      if (!isConsumerInitialized) {
          isConsumerInitialized = true;
         console.log("topicConsumer is Initialized : ");
