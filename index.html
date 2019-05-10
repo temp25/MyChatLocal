@@ -2,8 +2,10 @@
 	<head>
 		<title></title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/Swal.all.min.js"></script>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/Swal.min.css">
+		<!-- Sweetalert2 js and css -->
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.32.4/sweetalert2.all.min.js"></script>
+	   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.32.4/sweetalert2.min.css"/>
+	   <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
 		<script>
 		var appUsers = [];
             var socket = io('https://nodesample201.herokuapp.com');
