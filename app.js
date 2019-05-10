@@ -31,6 +31,52 @@ io.on('disconnect', (socket) => {
 });
 
 
+const kafka = new Kafka({
+  logLevel: logLevel.INFO,
+  brokers: [
+    'velomobile-01.srvs.cloudkafka.com:9094',
+    'velomobile-02.srvs.cloudkafka.com:9094',
+    'velomobile-03.srvs.cloudkafka.com:9094'
+  ], //[`${host}:9094`],
+  clientId: 'chat-consumer',
+  ssl: {
+    rejectUnauthorized: true
+  },
+  sasl: {
+    mechanism: 'scram-sha-256',
+    username: '19uds2d2', //'test',
+    password: '48yZeR87btROThUIxvSzmooG4v7QZ3Pe', //'testtest',
+  },
+});
+
+
+const userTopic = "19uds2d2-testUsers2";
+
+const errorTypes = ['unhandledRejection', 'uncaughtException']
+const signalTraps = ['SIGTERM', 'SIGINT', 'SIGUSR2']
+
+errorTypes.map(type => {
+  process.on(type, async e => {
+    try {
+      console.log(`process.on ${type}`)
+      console.error(e)
+      await consumer.disconnect()
+      process.exit(0)
+    } catch (_) {
+      process.exit(1)
+    }
+  });
+});
+
+signalTraps.map(type => {
+  process.once(type, async () => {
+    try {
+      await consumer.disconnect()
+    } finally {
+      process.kill(process.pid, type)
+    }
+  });
+});
 
 function onRequest(request, response) {
   /* response.writeHead(200);
