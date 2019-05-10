@@ -39,7 +39,7 @@
     	}, 10000)
     	
     	function setUserNick(){
-    	    const {value: nickname} = Swal.fire({
+    	    Swal.fire({
               title: 'Enter your nickname',
               input: 'text',
               inputValue: inputValue,
@@ -47,35 +47,31 @@
               inputValidator: (value) => {
                 if (!value) {
                   return 'Please enter a valid nickname'
+                } else {
+                    if(nickname in appUsers){
+                         Swal.fire({
+                    		  type: 'success',
+                    		  type: 'Welcome back, '+nickname,
+                    		  allowOutsideClick: () => false,
+                    		  showConfirmButton: false,
+                    		  timer: 1000, //dismiss after 2 seconds
+                    	 });
+                    }else{
+                        //send back user nick to server for adding it to queue
+                        socket.emit('addUser', nickname);
+                         Swal.fire({
+                    		  type: 'success',
+                    		  title: 'Welcome, '+nickname,
+                    		  allowOutsideClick: () => false,
+                    		  showConfirmButton: false,
+                    		  timer: 1000, //dismiss after 2 seconds
+                    	 });
+                    }
+                    return nickname;
                 }
               }
             });
             
-            if(nickname){
-                
-                if(nickname in appUsers){
-                     Swal.fire({
-                		  type: 'success',
-                		  type: 'Welcome back, '+nickname,
-                		  allowOutsideClick: () => false,
-                		  showConfirmButton: false,
-                		  timer: 1000, //dismiss after 2 seconds
-                	 });
-                }else{
-                    //send back user nick to server for adding it to queue
-                    socket.emit('addUser', nickname);
-                     Swal.fire({
-                		  type: 'success',
-                		  title: 'Welcome, '+nickname,
-                		  allowOutsideClick: () => false,
-                		  showConfirmButton: false,
-                		  timer: 1000, //dismiss after 2 seconds
-                	 });
-                }
-                
-            }else{
-                //TODO: Error handling for nickname entry
-            }
     	}
 
 			function addUser(user) {
