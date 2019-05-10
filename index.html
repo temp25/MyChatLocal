@@ -21,9 +21,12 @@
 			function checkUser() {
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
-					if (xhttp.readyState == 4 && xhttp.status == 200) {
+					if (xhttp.readyState === 4 && xhttp.status === 200) {
 						//document.getElementById("demo").innerHTML = this.responseText;
-						alert("response : "+xhttp.responseText);
+						//alert("response : "+xhttp.responseText);
+						console.log("response : "+xhttp.responseText);
+						const users = JSON.parse(xhttp.responseText);
+						users.forEach(user => addUser(user));
 					}
 				};
 				xhttp.open("GET", "https://nodesample201.herokuapp.com/checkUser", false);
