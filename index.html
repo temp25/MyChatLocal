@@ -4,6 +4,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/sweetalert2.all.min.js"></script>
 		<script>
+		var appUsers = [];
             var socket = io('https://nodesample201.herokuapp.com');
             socket.on('connect', function(){
                 console.log('connected');
@@ -15,14 +16,68 @@
             socket.on('appUserUpdate', function(data){
                 //console.log('myevent triggered. Data received : \n');
                 //console.log(data);
+                appUsers.push(data);
                 addUser(data);
             });
             socket.on('disconnect', function(){
                 console.log('disconnected');
             });
-		</script>
-		<script type="text/javascript">
-		
+            
+		Swal.fire({
+    		title: 'Loading page contents',
+    		allowOutsideClick: () => false,
+    		onOpen: () => {
+    			   Swal.showLoading();
+    		}
+    	});
+    	
+    	setTimeout(()=>{
+            if(Swal.isLoading()){
+                Swal.close();
+            }
+    	    setUserNick();
+    	}, 10000)
+    	
+    	function setUserNick(){
+    	    const {value: nickname} = await Swal.fire({
+              title: 'Enter your nickname',
+              input: 'text',
+              inputValue: inputValue,
+              showCancelButton: false,
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'Please enter a valid nickname'
+                }
+              }
+            })
+            
+            if(nickname){
+                
+                if(nickname in appUsers){
+                     Swal.fire({
+                		  type: 'success',
+                		  type: 'Welcome back, '+nickname,
+                		  allowOutsideClick: () => false,
+                		  showConfirmButton: false,
+                		  timer: 1000, //dismiss after 2 seconds
+                	 });
+                }else{
+                    //send back user nick to server for adding it to queue
+                    socket.emit('addUser', nickname);
+                     Swal.fire({
+                		  type: 'success',
+                		  title: 'Welcome, '+nickname,
+                		  allowOutsideClick: () => false,
+                		  showConfirmButton: false,
+                		  timer: 1000, //dismiss after 2 seconds
+                	 });
+                }
+                
+            }else{
+                //TODO: Error handling for nickname entry
+            }
+    	}
+
 			function addUser(user) {
 				var usersList = document.getElementById("usersList");
 				var userNode = document.createElement("li");

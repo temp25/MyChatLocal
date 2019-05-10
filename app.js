@@ -101,6 +101,11 @@ io.on('connection', (socket) => {
     };
     
     run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
+    
+    socket.on('addUser', (data) => {
+        console.log('addUser requested for user with nick, '+data);
+    });
+    
 });
 
 function onRequest(request, response) {
