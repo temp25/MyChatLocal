@@ -3,11 +3,11 @@
 		<title></title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
 		<script>
-            var socket = io('http://nodesample201.herokuapp.com');
+            var socket = io('https://nodesample201.herokuapp.com');
             socket.on('connect', function(){
                 console.log('connected');
             });
-            socket.on('myevent', function(dat){
+            socket.on('myevent', function(data){
                 console.log('myevent triggered');
             });
             socket.on('disconnect', function(){
