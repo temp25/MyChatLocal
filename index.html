@@ -23,23 +23,23 @@
                 console.log('disconnected');
             });
             
-		Swal.fire({
+		Sweetalert2.fire({
     		title: 'Loading page contents',
     		allowOutsideClick: () => false,
     		onOpen: () => {
-    			   Swal.showLoading();
+    			   Sweetalert2.showLoading();
     		}
     	});
     	
     	setTimeout(()=>{
-            if(Swal.isLoading()){
-                Swal.close();
+            if(Sweetalert2.isLoading()){
+                Sweetalert2.close();
             }
     	    setUserNick();
     	}, 10000)
     	
     	function setUserNick(){
-    	    Swal.fire({
+    	    Sweetalert2.fire({
               title: 'Enter your nickname',
               input: 'text',
               inputValue: inputValue,
@@ -49,7 +49,7 @@
                   return 'Please enter a valid nickname'
                 } else {
                     if(nickname in appUsers){
-                         Swal.fire({
+                         Sweetalert2.fire({
                     		  type: 'success',
                     		  type: 'Welcome back, '+nickname,
                     		  allowOutsideClick: () => false,
@@ -59,7 +59,7 @@
                     }else{
                         //send back user nick to server for adding it to queue
                         socket.emit('addUser', nickname);
-                         Swal.fire({
+                         Sweetalert2.fire({
                     		  type: 'success',
                     		  title: 'Welcome, '+nickname,
                     		  allowOutsideClick: () => false,
