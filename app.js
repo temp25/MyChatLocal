@@ -5,8 +5,10 @@ const { Kafka, logLevel } = require('kafkajs');
 const appUsers = [];
 const PORT = process.env.PORT || 5000;
 var isConsumerInitialized = false;
+var uniqueGroupIdInitialized = false;
 var socketPtr;
 var ip_ua;
+var uniqueGroupId;
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -78,33 +80,44 @@ signalTraps.map(type => {
 io.on('connection', (socket) => {
     console.log('Client connected');
     socketPtr = socket;
-    var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
-    const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+    
+     if (!isConsumerInitialized) {
+         isConsumerInitialized = true;
+        console.log("topicConsumer is Initialized : ");
+        var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
+        const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+        
+        while(!uniqueGroupIdInitialized){
+        }
 
-    const run = async () => {
-      await consumer.connect();
-      await consumer.subscribe({ topic: userTopic, fromBeginning: true });
-      await consumer.run({
-        partitionsConsumedConcurrently: 5,
-        eachMessage: async ({ topic, partition, message }) => {
-            const msgRcvd = message.value.toString();
-          //console.log("msgRcvd : "+msgRcvd);
-          socket.emit('appUserUpdate', msgRcvd);
-          if(!(msgRcvd in appUsers)){
-              appUsers.push(msgRcvd);
-              
-              //console.log(appUsers.length+" app users added so far");
-          }
-        },
-    
-      });
-    };
-    
-    run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
-    
-    socket.on('addUser', (data) => {
-        console.log('addUser requested for user with nick, '+data);
-    });
+            const run = async () => {
+              await consumer.connect();
+              await consumer.subscribe({ topic: userTopic, fromBeginning: true });
+              await consumer.run({
+                partitionsConsumedConcurrently: 5,
+                eachMessage: async ({ topic, partition, message }) => {
+                    const msgRcvd = message.value.toString();
+                  //console.log("msgRcvd : "+msgRcvd);
+                  socket.emit('appUserUpdate', msgRcvd);
+                  if(!(msgRcvd in appUsers)){
+                      appUsers.push(msgRcvd);
+                      
+                      //console.log(appUsers.length+" app users added so far");
+                  }
+                },
+            
+              });
+            };
+            
+            run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
+        
+        
+        socket.on('addUser', (data) => {
+            console.log('addUser requested for user with nick, '+data);
+        });
+
+     }
+
     
 });
 
@@ -113,13 +126,17 @@ function onRequest(request, response) {
   response.write('Hello Noders');
   response.end(); */
  
- 
- /*
  var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
  var user_agent = request.headers['user-agent'];
  ip_ua = user_ip_address+"_"+user_agent;
- var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
+ uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
  
+ if(!uniqueGroupIdInitialized){
+     uniqueGroupIdInitialized = true;
+    uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
+ }
+ 
+ /*
  if (!isConsumerInitialized) {
     isConsumerInitialized = true;
     console.log("topicConsumer is Initialized : ");
