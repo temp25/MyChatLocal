@@ -6,6 +6,7 @@ const appUsers = [];
 const PORT = process.env.PORT || 5000;
 var isConsumerInitialized = false;
 var socketPtr;
+var ip_ua;
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -14,11 +15,6 @@ const io = require('socket.io')(server);
 server.listen(PORT); //bind to dynamic PORT set by heroku at runtime
 console.log('Server has started');
 
-
-io.on('connection', (socket) => {
-    console.log('Client connected');
-    socketPtr = socket;
-});
 
 /*setTimeout(() => {
     console.log("Invoking socket emission");
@@ -78,14 +74,46 @@ signalTraps.map(type => {
   });
 });
 
+
+io.on('connection', (socket) => {
+    console.log('Client connected');
+    socketPtr = socket;
+    var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
+    const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
+
+    const run = async () => {
+      await consumer.connect();
+      await consumer.subscribe({ topic: userTopic, fromBeginning: true });
+      await consumer.run({
+        partitionsConsumedConcurrently: 5,
+        eachMessage: async ({ topic, partition, message }) => {
+            const msgRcvd = message.value.toString();
+          //console.log("msgRcvd : "+msgRcvd);
+          socket.emit('appUserUpdate', msgRcvd);
+          if(!(msgRcvd in appUsers)){
+              appUsers.push(msgRcvd);
+              
+              //console.log(appUsers.length+" app users added so far");
+          }
+        },
+    
+      });
+    };
+    
+    run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
+});
+
 function onRequest(request, response) {
   /* response.writeHead(200);
   response.write('Hello Noders');
   response.end(); */
  
+ 
+ /*
  var user_ip_address = ((request.headers['x-forwarded-for'] || '').split(',')[0] || request.connection.remoteAddress);
  var user_agent = request.headers['user-agent'];
- var uniqueGroupId = user_ip_address+"_"+user_agent+"_"+(new Date()).getTime();
+ ip_ua = user_ip_address+"_"+user_agent;
+ var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
  
  if (!isConsumerInitialized) {
     isConsumerInitialized = true;
@@ -113,7 +141,8 @@ function onRequest(request, response) {
     
     run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
   }
-  
+  */
+
 
   if (request.url === "/") {
     fileSystem.readFile('./index.html', function (err, htmlContent) {
