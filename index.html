@@ -39,7 +39,7 @@
     	}, 10000)
     	
     	function setUserNick(){
-    	    const {value: nickname} = await Swal.fire({
+    	    const {value: nickname} = Swal.fire({
               title: 'Enter your nickname',
               input: 'text',
               inputValue: inputValue,
@@ -49,7 +49,7 @@
                   return 'Please enter a valid nickname'
                 }
               }
-            })
+            });
             
             if(nickname){
                 
