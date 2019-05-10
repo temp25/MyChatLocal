@@ -25,8 +25,8 @@
 						//document.getElementById("demo").innerHTML = this.responseText;
 						//alert("response : "+xhttp.responseText);
 						console.log("response : "+xhttp.responseText);
-						const users = JSON.parse(xhttp.responseText);
-						users.forEach(user => addUser(user));
+						const responseJson = JSON.parse(xhttp.responseText);
+						responseJson.users.forEach(user => addUser(user));
 					}
 				};
 				xhttp.open("GET", "https://nodesample201.herokuapp.com/checkUser", false);
