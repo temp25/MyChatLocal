@@ -4,6 +4,7 @@ const { Kafka, logLevel } = require('kafkajs');
 const appUsers = [];
 const PORT = process.env.PORT || 5000;
 var isConsumerInitialized = false;
+var usersJson = {};
 
 console.log("timestamp : " + (new Date()).getTime());
 
@@ -134,7 +135,6 @@ function onRequest(request, response) {
 }
 
 function getAvailableUsers() {
-    var userJso = {};
-    userJson['users'] = appUsers;
-  return JSON.stringify(userJson);//appUsers.join();
+    usersJson['users'] = appUsers;
+    return JSON.stringify(usersJson);//appUsers.join();
 }
