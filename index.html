@@ -2,7 +2,8 @@
 	<head>
 		<title></title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/sweetalert2.all.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/Swal.all.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.6/dist/Swal.min.css">
 		<script>
 		var appUsers = [];
             var socket = io('https://nodesample201.herokuapp.com');
@@ -23,23 +24,23 @@
                 console.log('disconnected');
             });
             
-		Sweetalert2.fire({
+		Swal.fire({
     		title: 'Loading page contents',
     		allowOutsideClick: () => false,
     		onOpen: () => {
-    			   Sweetalert2.showLoading();
+    			   Swal.showLoading();
     		}
     	});
     	
     	setTimeout(()=>{
-            if(Sweetalert2.isLoading()){
-                Sweetalert2.close();
+            if(Swal.isLoading()){
+                Swal.close();
             }
     	    setUserNick();
     	}, 10000)
     	
     	function setUserNick(){
-    	    Sweetalert2.fire({
+    	    Swal.fire({
               title: 'Enter your nickname',
               input: 'text',
               inputValue: inputValue,
@@ -49,7 +50,7 @@
                   return 'Please enter a valid nickname'
                 } else {
                     if(nickname in appUsers){
-                         Sweetalert2.fire({
+                         Swal.fire({
                     		  type: 'success',
                     		  type: 'Welcome back, '+nickname,
                     		  allowOutsideClick: () => false,
@@ -59,7 +60,7 @@
                     }else{
                         //send back user nick to server for adding it to queue
                         socket.emit('addUser', nickname);
-                         Sweetalert2.fire({
+                         Swal.fire({
                     		  type: 'success',
                     		  title: 'Welcome, '+nickname,
                     		  allowOutsideClick: () => false,
