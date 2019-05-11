@@ -112,7 +112,7 @@ function onRequest(request, response) {
       response.end();
     }); */
 
-    console.log("topicConsumer is Initialized : ");
+    /* console.log("topicConsumer is Initialized : ");
     const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
 
     const run = async () => {
@@ -138,7 +138,7 @@ function onRequest(request, response) {
     
     socketPtr.on('addUser', (data) => {
         console.log('addUser requested for user with nick, '+data);
-    });
+    }); */
     
     serveFile(response, "./index.html", "text/html");
   } else if (request.url === "/image/favicon.ico") {
