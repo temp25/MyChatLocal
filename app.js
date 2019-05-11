@@ -80,47 +80,6 @@ signalTraps.map(type => {
 io.on('connection', (socket) => {
     console.log('Client connected');
     socketPtr = socket;
-    
-    
-    
-     if (!isConsumerInitialized) {
-         isConsumerInitialized = true;
-        console.log("topicConsumer is Initialized : ");
-        var uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
-        const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
-        
-        while(!uniqueGroupIdInitialized){
-        }
-
-            const run = async () => {
-              await consumer.connect();
-              await consumer.subscribe({ topic: userTopic, fromBeginning: true });
-              await consumer.run({
-                partitionsConsumedConcurrently: 5,
-                eachMessage: async ({ topic, partition, message }) => {
-                    const msgRcvd = message.value.toString();
-                  //console.log("msgRcvd : "+msgRcvd);
-                  socket.emit('appUserUpdate', msgRcvd);
-                  if(!(msgRcvd in appUsers)){
-                      appUsers.push(msgRcvd);
-                      
-                      //console.log(appUsers.length+" app users added so far");
-                  }
-                },
-            
-              });
-            };
-            
-            run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
-        
-        
-        socket.on('addUser', (data) => {
-            console.log('addUser requested for user with nick, '+data);
-        });
-
-     }
-
-    
 });
 
 function onRequest(request, response) {
@@ -133,14 +92,26 @@ function onRequest(request, response) {
  ip_ua = user_ip_address+"_"+user_agent;
  uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
  
- if(!uniqueGroupIdInitialized){
+ /* if(!uniqueGroupIdInitialized){
      uniqueGroupIdInitialized = true;
     uniqueGroupId = ip_ua +"_"+(new Date()).getTime();
- }
+ } */
  
- /*
- if (!isConsumerInitialized) {
+ /* if (!isConsumerInitialized) {
     isConsumerInitialized = true;
+    
+  } */
+
+
+  if (request.url === "/" || request.url === "/index.html") {
+    /* fileSystem.readFile('./index.html', function (err, htmlContent) {
+      response.writeHead(200, {
+        'Content-Type': 'text/html'
+      });
+      response.write(String(htmlContent));
+      response.end();
+    }); */
+
     console.log("topicConsumer is Initialized : ");
     const consumer = kafka.consumer({ groupId: uniqueGroupId, fromBeginning: true  });
 
@@ -164,18 +135,11 @@ function onRequest(request, response) {
     };
     
     run().catch(e => console.error(`[example/consumer] ${e.message}`, e));
-  }
-  */
-
-
-  if (request.url === "/" || request.url === "/index.html") {
-    /* fileSystem.readFile('./index.html', function (err, htmlContent) {
-      response.writeHead(200, {
-        'Content-Type': 'text/html'
-      });
-      response.write(String(htmlContent));
-      response.end();
-    }); */
+    
+    socketPtr.on('addUser', (data) => {
+        console.log('addUser requested for user with nick, '+data);
+    });
+    
     serveFile(response, "./index.html", "text/html");
   } else if (request.url === "/image/favicon.ico") {
     serveFile(response, "."+request.url, "image/ico");
