@@ -168,14 +168,31 @@ function onRequest(request, response) {
   */
 
 
-  if (request.url === "/") {
-    fileSystem.readFile('./index.html', function (err, htmlContent) {
+  if (request.url === "/" || request.url === "/index.html") {
+    /* fileSystem.readFile('./index.html', function (err, htmlContent) {
       response.writeHead(200, {
         'Content-Type': 'text/html'
       });
       response.write(String(htmlContent));
       response.end();
-    });
+    }); */
+    serveFile(response, "./index.html", "text/html");
+  } else if (request.url === "/favicon.ico") {
+    serveFile(response, "./image/favicon.ico", "image/ico");
+  } else if (request.url === "/jquery-3.3.1.min.js") {
+    serveFile(response, "./js/jquery-3.3.1.min.js", "text/javascript");
+  } else if (request.url === "/socket.io.slim.js") {
+    serveFile(response, "./js/socket.io.slim.js", "text/javascript");
+  } else if (request.url === "/sweetalert2.all.min.js") {
+    serveFile(response, "./js/sweetalert2.all.min.js", "text/javascript");
+  } else if (request.url === "/promise.min.js") {
+    serveFile(response, "./js/promise.min.js", "text/javascript");
+  } else if (request.url === "/sweetalert2.min.css") {
+    serveFile(response, "./css/sweetalert2.min.css", "text/css");
+  } else if (request.url === "/client.js") {
+    serveFile(response, "./js/client.js", "text/javascript");
+  } else if (request.url === "/client.css") {
+    serveFile(response, "./css/client.css", "text/css");
   } else if (request.url === "/checkUser") {
     console.log("Users check invoked");
     
@@ -193,4 +210,14 @@ function onRequest(request, response) {
   } else {
     //TODO: 404 handling
   }
+}
+
+function serveFile(response, filePath, contentType) {
+    fileSystem.readFile(filePath, function (err, fileContent) {
+        response.writeHead(200, {
+            'Content-Type': contentType
+        });
+        response.write(String(fileContent));
+        response.end();
+    });
 }
