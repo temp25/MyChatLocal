@@ -177,22 +177,22 @@ function onRequest(request, response) {
       response.end();
     }); */
     serveFile(response, "./index.html", "text/html");
-  } else if (request.url === "/favicon.ico") {
-    serveFile(response, "./image/favicon.ico", "image/ico");
-  } else if (request.url === "/jquery-3.3.1.min.js") {
-    serveFile(response, "./js/jquery-3.3.1.min.js", "text/javascript");
-  } else if (request.url === "/socket.io.slim.js") {
-    serveFile(response, "./js/socket.io.slim.js", "text/javascript");
-  } else if (request.url === "/sweetalert2.all.min.js") {
-    serveFile(response, "./js/sweetalert2.all.min.js", "text/javascript");
-  } else if (request.url === "/promise.min.js") {
-    serveFile(response, "./js/promise.min.js", "text/javascript");
-  } else if (request.url === "/sweetalert2.min.css") {
-    serveFile(response, "./css/sweetalert2.min.css", "text/css");
-  } else if (request.url === "/client.js") {
-    serveFile(response, "./js/client.js", "text/javascript");
-  } else if (request.url === "/client.css") {
-    serveFile(response, "./css/client.css", "text/css");
+  } else if (request.url === "/image/favicon.ico") {
+    serveFile(response, "."+request.url, "image/ico");
+  } else if (request.url === "/js/jquery-3.3.1.min.js") {
+    serveFile(response, "."+request.url, "text/javascript");
+  } else if (request.url === "/js/socket.io.slim.js") {
+    serveFile(response, "."+request.url, "text/javascript");
+  } else if (request.url === "/js/sweetalert2.all.min.js") {
+    serveFile(response, "."+request.url, "text/javascript");
+  } else if (request.url === "/js/promise.min.js") {
+    serveFile(response, "."+request.url, "text/javascript");
+  } else if (request.url === "/css/sweetalert2.min.css") {
+    serveFile(response, "."+request.url, "text/css");
+  } else if (request.url === "/js/client.js") {
+    serveFile(response, "."+request.url, "text/javascript");
+  } else if (request.url === "/css/client.css") {
+    serveFile(response, "."+request.url, "text/css");
   } else if (request.url === "/checkUser") {
     console.log("Users check invoked");
     
