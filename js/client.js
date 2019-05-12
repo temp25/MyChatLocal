@@ -26,7 +26,7 @@ $(document).ready(function () {
     });
 
     Swal.fire({
-        title: 'Prepping up UI please wait',
+        title: 'Prepping up UI please wait...',
         allowOutsideClick: () => false,
         onOpen: () => {
             Swal.showLoading();
@@ -36,7 +36,7 @@ $(document).ready(function () {
     setTimeout(() => {
         Swal.close();
         setupUserNick();
-    }, 5000);
+    }, 10000);
 
     function setupUserNick() {
         Swal.fire({
