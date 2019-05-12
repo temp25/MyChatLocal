@@ -1,6 +1,6 @@
 div#messageView{
     float:left;
-    width: 89%;
+    width: 83%;
     height: 95%;
 }
 
@@ -60,7 +60,7 @@ div#messagesPostControl2{
 
 div#userView{
     float:left;
-    width: 7%;
+    width: 13%;
     height: 95%;
     border:1px solid black;
     padding: 1% 1% 1% 1%;
