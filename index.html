@@ -1,40 +1,41 @@
 <html>
-	<head>
-		<title></title>
-		<!-- favicon for website -->
-		<link rel="shortcut icon" type="image/png" href="image/favicon.ico">
 
-		<!-- <script src="js/jquery-3.3.1.min.js"></script> -->
-		<script src="js/socket.io.slim.js"></script>
-		<!-- Sweetalert2 js and css -->
-    	<script src="js/sweetalert2.all.min.js"></script>
-		<script src="js/promise.min.js"></script>
-	   <link rel="stylesheet" href="css/sweetalert2.min.css"/>
+<head>
+	<title></title>
+	<!-- favicon for website -->
+	<link rel="shortcut icon" type="image/png" href="image/favicon.ico">
 
-	   <script src="js/client.js"></script>
-		<link rel="stylesheet" href="css/client.css"/>
-	</head>
-	<body>
-			<div id="messageView">
-				<div id="messages"></div>
-				<div id="messagesPostControl">
-					<div id="messagesPostControl1">
-						<textarea id="message"></textarea>
-					</div>
-					<div id="messagesPostControl2">
-						<button id="postBtn" onclick="postMessage()">Post message</button>
-					</div>
-				</div>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/socket.io.slim.js"></script>
+	<!-- Sweetalert2 js and css -->
+	<script src="js/sweetalert2.all.min.js"></script>
+	<script src="js/promise.min.js"></script>
+	<link rel="stylesheet" href="css/sweetalert2.min.css" />
+
+	<script src="js/client.js"></script>
+	<link rel="stylesheet" href="css/client.css" />
+</head>
+
+<body>
+	<div id="messageView">
+		<div id="messages"></div>
+		<div id="messagesPostControl">
+			<div id="messagesPostControl1">
+				<textarea id="message"></textarea>
 			</div>
-			<div id="userView">
-				<div id="userViewHeader">
-					Available Users
-				</div>
-				<div id="userViewBody">
-					<ul id="usersList">
-					</ul>
-				</div>
+			<div id="messagesPostControl2">
+				<button id="postMessage">Post message</button>
 			</div>
+		</div>
+	</div>
+	<div id="userView">
+		<div id="userViewHeader">Available Users</div>
+		<div id="userViewBody">
+			<ul id="usersList">
+			</ul>
+		</div>
+	</div>
 
-	</body>
+</body>
+
 </html>
