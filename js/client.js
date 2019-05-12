@@ -1,118 +1,106 @@
+//var testMsg;
 
-$(document).ready(function(){
-    
+$(document).ready(function () {
+
     var appUsers = [];
-    var socket = io('https://nodesample201.herokuapp.com');
-    
-    socket.on('connect', function(){
+    var userNick = "";
+    var socket = io();
+
+    socket.on('connect', function () {
         console.log('connected');
     });
-    
-    /*socket.on('myevent', function(data){
-        console.log('myevent triggered. Data received : \n');
+
+    /* socket.on('myEvent', function (data) {
+        console.log('myEvent received');
         console.log(data);
+    }); */
+
+    socket.on('appUserUpdate', function (user) {
+        //console.log("appUserUpdate event received : "+user);
+        appUsers.push(user.toLowerCase());
+        //console.log("Updated users : "+appUsers.join());
+        addUser(user);
+    });
+
+    /*socket.on("broadcastedChatMessage", function (message) {
+        //console.log("BroadcastedChatMessage : "+data);
+        $("#messages").append(message.replace(/<(\/)?user>/g, "<$1b>"));
     });*/
-    
-    socket.on('appUserUpdate', function(data){
-        //console.log('myevent triggered. Data received : \n');
-        //console.log(data);
-        appUsers.push(data);
-        addUser(data);
+
+    socket.on("appMessageUpdate", function (message) {
+        //console.log("BroadcastedChatMessage : "+data);
+        const msgKey = arrayBufferToString(message.key);
+        const msgValue = arrayBufferToString(message.value); 
+        //console.log("appMessageUpdate_key : "+msgKey+"\t\tappMessageUpdate_value : "+msgValue);
+        //testMsg = message;
+        //console.log(testMsg);
+        $("#messages").append(msgValue.replace(/<(\/)?user>/g, "<$1b>"));
     });
-    
-    socket.on('disconnect', function(){
-        console.log('disconnected');
+
+    $("#postMessage").click(function () {
+        const message = new Date().toLocaleString() + "<br/>" + "<user>" + userNick + "</user>: " + $("#message").val() + "<br/><br/>";
+        $("#message").val('');
+        socket.emit("chatMessage", message);
     });
-    
-    /*Swal.fire({
-        title: 'Loading page contents',
+
+    Swal.fire({
+        title: 'Prepping up UI please wait',
         allowOutsideClick: () => false,
         onOpen: () => {
             Swal.showLoading();
         }
-    });*/
-    
-    setTimeout(()=>{
-        if(Swal.isLoading()){
-            Swal.close();
-        }
-        setUserNick();
-    }, 10000);
-    
-    function setUserNick(){
+    });
+
+    setTimeout(() => {
+        Swal.close();
+        setupUserNick();
+    }, 5000);
+
+    function setupUserNick() {
+        //console.log("appUsers till this point"+appUsers.join());
         Swal.fire({
             title: 'Enter your nickname',
             input: 'text',
-            inputValue: inputValue,
+            inputValue: '',
+            allowOutsideClick: false,
             showCancelButton: false,
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'Please enter a valid nickname'
+            inputValidator: (nickname) => {
+                if (!nickname || nickname.trim() == '') {
+                    return 'Please enter a valid nickname';
                 } else {
-                    if(nickname in appUsers){
-                        Swal.fire({
-                            type: 'success',
-                            type: 'Welcome back, '+nickname,
-                            allowOutsideClick: () => false,
-                            showConfirmButton: false,
-                            timer: 1000, //dismiss after 2 seconds
-                        });
+                    if ($.inArray(nickname.toLowerCase(), appUsers) != -1) {
+                        showGreetMessage("Welcome back, " + nickname);
                     } else {
                         //send back user nick to server for adding it to queue
                         socket.emit('addUser', nickname);
-                        Swal.fire({
-                            type: 'success',
-                            title: 'Welcome, '+nickname,
-                            allowOutsideClick: () => false,
-                            showConfirmButton: false,
-                            timer: 1000, //dismiss after 2 seconds
-                        });
+                        showGreetMessage("Welcome, " + nickname);
                     }
+                    userNick = nickname;
                     return nickname;
                 }
-              }
+            }
         });
-        
-        var nickname = prompt("Please enter your nickname", "");
-        if (nickname != null && nickname.trim() != '') {
-            if(nickname in appUsers){
-                alert("Welcome back, "+nickname );
-            } else {
-                //send back user nick to server for adding it to queue
-                socket.emit('addUser', nickname);
-                alert("Welcome, "+nickname );
-            }
-        }
     }
-    
+
+    function showGreetMessage(message) {
+        Swal.fire({
+            type: 'success',
+            title: message,
+            allowOutsideClick: () => false,
+            showConfirmButton: false,
+            timer: 1000, //dismiss after 2 seconds
+        });
+    }
+
     function addUser(user) {
-        var usersList = document.getElementById("usersList");
-        var userNode = document.createElement("li");
-        userNode.innerHTML = user;
-        usersList.appendChild(userNode);
+        $("#usersList").append("<li>" + user + "</li>");
     }
-    
-    function postMessage() {
-        var message = document.getElementById("message");
-        document.getElementById("messages").appendChild(document.createTextNode(message.value));
-        document.getElementById("messages").appendChild(document.createElement("br"));
-        document.getElementById("messages").appendChild(document.createElement("br"));
-        message.value = "";
-    }
-    
-    function checkUser() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (xhttp.readyState === 4 && xhttp.status === 200) {
-                //document.getElementById("demo").innerHTML = this.responseText;
-                //alert("response : "+xhttp.responseText);
-                console.log("response : "+xhttp.responseText);
-                const responseJson = JSON.parse(xhttp.responseText);
-                responseJson.users.forEach(user => addUser(user));
-            }
-        };
-        xhttp.open("GET", "https://nodesample201.herokuapp.com/checkUser", false);
-        xhttp.send();
+
+    function arrayBufferToString(buffer) {
+        const byteArray=new Uint8Array(buffer);
+        let byteString = "";
+        byteArray.forEach(byteVal => byteString+=String.fromCodePoint(byteVal));
+        return byteString;
     }
 
 });
