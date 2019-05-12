@@ -1,5 +1,3 @@
-//var testMsg;
-
 $(document).ready(function () {
 
     var appUsers = [];
@@ -10,30 +8,14 @@ $(document).ready(function () {
         console.log('connected');
     });
 
-    /* socket.on('myEvent', function (data) {
-        console.log('myEvent received');
-        console.log(data);
-    }); */
-
     socket.on('appUserUpdate', function (user) {
-        //console.log("appUserUpdate event received : "+user);
         appUsers.push(user.toLowerCase());
-        //console.log("Updated users : "+appUsers.join());
         addUser(user);
     });
 
-    /*socket.on("broadcastedChatMessage", function (message) {
-        //console.log("BroadcastedChatMessage : "+data);
-        $("#messages").append(message.replace(/<(\/)?user>/g, "<$1b>"));
-    });*/
-
     socket.on("appMessageUpdate", function (message) {
-        //console.log("BroadcastedChatMessage : "+data);
         const msgKey = arrayBufferToString(message.key);
         const msgValue = arrayBufferToString(message.value); 
-        //console.log("appMessageUpdate_key : "+msgKey+"\t\tappMessageUpdate_value : "+msgValue);
-        //testMsg = message;
-        //console.log(testMsg);
         $("#messages").append(msgValue.replace(/<(\/)?user>/g, "<$1b>"));
     });
 
@@ -57,7 +39,6 @@ $(document).ready(function () {
     }, 5000);
 
     function setupUserNick() {
-        //console.log("appUsers till this point"+appUsers.join());
         Swal.fire({
             title: 'Enter your nickname',
             input: 'text',
