@@ -12,6 +12,9 @@ ul {
     list-style-type: none;
     text-align: left;
     width: 100%;
+    padding-inline-start: 1%;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
 }
 
 div#userViewBody {
@@ -31,8 +34,9 @@ div#messages{
 
 div#messagesPostControl{
     width:100%;
-    height: 15%;
+    height: 13%;
     margin-top: 1%;
+    margin-bottom: 1%;
     border:1px solid black;
 }
 
@@ -51,6 +55,7 @@ textarea#message{
 div#messagesPostControl2{
     height: 100%;
     width: 10%;
+    margin-top: 8px;
 }
 
 div#userView{
