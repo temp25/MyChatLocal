@@ -38,7 +38,7 @@ const signalTraps = ['SIGTERM', 'SIGINT', 'SIGUSR2']
 io.on('connection', function (socket) {
     const ipAddr = socket.request.connection.remoteAddress;
     const userAgent = socket.request.headers["user-agent"];
-    const uniqueUserConsumerGroupId = ipAddr + "_" + userAgent + "_" + new Date().getTime();
+    const uniqueUserConsumerGroupId = userTopic + "_" + ipAddr + "_" + userAgent + "_" + new Date().getTime();
 
     const userConsumer = kafka.consumer({ groupId: uniqueUserConsumerGroupId, fromBeginning: true });
 
@@ -57,7 +57,7 @@ io.on('connection', function (socket) {
 
     runUserConsumer().catch(e => console.error(`[chat/userConsumer] ${e.message}`, e));
 
-    const uniqueMessageConsumerGroupId = ipAddr + "_" + userAgent + "_" + new Date().getTime();
+    const uniqueMessageConsumerGroupId = messageTopic + "_" + ipAddr + "_" + userAgent + "_" + new Date().getTime();
     const messageConsumer = kafka.consumer({ groupId: uniqueMessageConsumerGroupId, fromBeginning: true });
 
     const runMessageConsumer = async () => {
