@@ -8,19 +8,15 @@ const PORT = process.env.PORT || 5000;
 
 const kafka = new Kafka({
     logLevel: logLevel.INFO,
-    brokers: [
-      'velomobile-01.srvs.cloudkafka.com:9094',
-      'velomobile-02.srvs.cloudkafka.com:9094',
-      'velomobile-03.srvs.cloudkafka.com:9094'
-    ],
+    brokers: process.env.CLOUDKARAFKA_BROKERS.split(","),
     clientId: 'chat-consumer',
     ssl: {
       rejectUnauthorized: true
     },
     sasl: {
-      mechanism: 'scram-sha-256',
-      username: '19uds2d2',
-      password: '48yZeR87btROThUIxvSzmooG4v7QZ3Pe',
+      mechanism: process.env.CLOUDKARAFKA_MECHANISM,
+      username: process.env.CLOUDKARAFKA_USERNAME,
+      password: process.env.CLOUDKARAFKA_PASSWORD,
     },
   });
 
@@ -29,8 +25,8 @@ server.listen(PORT, function () {
     console.log("listening on PORT " + PORT);
 });
 
-const userTopic = "19uds2d2-testUsers3";
-const messageTopic = "19uds2d2-testMessages3";
+const userTopic = process.env.CLOUDKARAFKA_USERS_TOPIC;
+const messageTopic = process.env.CLOUDKARAFKA_MESSAGES_TOPIC;
 
 const errorTypes = ['unhandledRejection', 'uncaughtException']
 const signalTraps = ['SIGTERM', 'SIGINT', 'SIGUSR2']
