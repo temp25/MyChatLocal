@@ -213,7 +213,7 @@ function getFileTypeFromRequestUrl(requestUrl) {
 
 function getContentTypeFromExtension(fileExt) {
     switch (fileExt) {
-        case "ico": return "image/png";
+        case "ico": return "image/x-icon";
 
         case "/":
         case "html": return "text/html";
